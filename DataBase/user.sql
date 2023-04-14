@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 14-04-2023 a las 21:07:05
+-- Tiempo de generación: 15-04-2023 a las 01:05:46
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.0.19
 
@@ -28,12 +28,12 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `user` (
-  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ID` bigint(20) NOT NULL,
   `NAME` varchar(30) NOT NULL,
   `SURNAME` varchar(30) NOT NULL,
   `USERNAME` varchar(30) NOT NULL,
-  `PASSWORD` varchar(30) NOT NULL,
-  `Active` tinyint(1) NOT NULL DEFAULT 1,
+  `PASSWORD` varchar(60) NOT NULL,
+  `Active` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -41,13 +41,9 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`ID`, `NAME`, `SURNAME`, `USERNAME`, `PASSWORD`, `Active`) VALUES
-(1, 'Pedro', 'Gonzales', 'PepGonzCambiado', '12345', 0),
-(2, 'Pepito', 'El Pepote', 'Pepotrox123', 'ElSuperPepos', 0),
-(3, 'Pedro', 'Gonzales', 'PepGonz', '12345', 1),
-(4, 'Pedro', 'Gonzales', 'PepGonz', '12345', 1),
-(5, 'Pedro', 'Gonzales', 'PepGonz', '12345', 1),
-(6, 'a', 'a', 'a', 'a', 1),
-(10, 'Test7', 'Test7', 'Test7', 'Test7', 1);
+(1, 'Primer', 'Usuario', 'PrimerUsuario', '$2a$10$41NwvJKYkdaGTn9ToZS6KeSW4Lu2ZJJdyWFJXFTFDmIg3Rubrylzq', 1),
+(2, 'Segundo', 'Usuario', 'Segundo Usuario', '$2a$10$eI0LmMq.Csa.GXknqrFGW.mRKuWiLFawfwwWiT7jh2.jOVAdfmccm', 1),
+(3, 'Usuario', 'AAKK', 'Tercer', '$2a$10$DTVyr3.bLuApGO6Xk8nWHusKgTrq9HoA6d23LDS6qw6Su./BwdIpi', 1);
 
 --
 -- Índices para tablas volcadas
@@ -57,7 +53,8 @@ INSERT INTO `user` (`ID`, `NAME`, `SURNAME`, `USERNAME`, `PASSWORD`, `Active`) V
 -- Indices de la tabla `user`
 --
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`ID`);
+  ADD PRIMARY KEY (`ID`),
+  ADD UNIQUE KEY `USERNAME` (`USERNAME`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -67,7 +64,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT de la tabla `user`
 --
 ALTER TABLE `user`
-  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
