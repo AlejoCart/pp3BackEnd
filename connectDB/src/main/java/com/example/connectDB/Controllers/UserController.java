@@ -2,14 +2,17 @@ package com.example.connectDB.Controllers;
 
 import com.example.connectDB.Entities.User;
 import com.example.connectDB.Repositories.UserRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.json.GsonBuilderUtils;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 @RestController
@@ -17,7 +20,9 @@ import java.util.Optional;
 @CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
     @Autowired
-    UserRepository repositorio;
+    private UserRepository repositorio;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @GetMapping("api/users/{id}")
     public ResponseEntity<User> findById(@PathVariable Long id) {
@@ -47,26 +52,55 @@ public class UserController {
     @PostMapping("/api/users")
     public ResponseEntity<User> create(@RequestBody User user,
                                        @RequestHeader HttpHeaders headers) {
-        System.out.println(user.toString());
+        //System.out.println(user.toString());
         if(user.getID()!=null ) {
             return ResponseEntity.badRequest().build();
         } else {
-            repositorio.save(user);
-            return ResponseEntity.ok(user);
+            User aux= user;
+            aux.setPASSWORD(passwordEncoder.encode(user.getPASSWORD()));
+            //No se porque la DB no me hace caso al default 1 para el active,
+            // si podes hacer que funcino desde la DB borra la linea de abajo
+            // Cambia tambien linea 103, adentro del update
+            aux.setACTIVE(1);
+            repositorio.save(aux);
+            return ResponseEntity.ok(aux);
         }
     }
 
     @PutMapping("/api/users/{id}")
     public ResponseEntity<User> update(@PathVariable Long id,
                                        @RequestBody Object userAux) {
-        User user=(User)userAux;
+
+        ObjectMapper obj=new ObjectMapper();
+        User user = null;
+        String jsonStr = null;
+        String passAux="";
+
+        //Casteo a JSON necesario porque sino se rompe al no poder castear el
+        // LinkedHashMap que recibe a la entidad usuario
+        try {
+            jsonStr = obj.writeValueAsString(userAux);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        // Displaying Java object into a JSON string
+        System.out.println(jsonStr);
+
+        try {
+            user = obj.readValue(jsonStr, User.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("usuario despues de casteo de Json a clase: "+user.toString());
+        //User user=(User)userAux;
         if (id== null) {
             return ResponseEntity.badRequest().build();
         } else if (repositorio.existsById(id) && repositorio.getReferenceById(id).getACTIVE()==1) {
-            System.out.println("Usuario entrante: "+user.toString());
-            System.out.println("ID de user entrante: "+user.getID());
             user.setID(id);
-            System.out.println("ID corregida: "+user.getID());
+            passAux=user.getPASSWORD();
+            user.setPASSWORD(passwordEncoder.encode(passAux));
+            //Hotfix porque la base de datos no me deja ponerlo por default
+            user.setACTIVE(1);
             repositorio.save(user);
             return ResponseEntity.ok(repositorio.getReferenceById(user.getID()));
         } else {
