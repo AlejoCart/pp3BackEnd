@@ -1,6 +1,8 @@
 package com.example.connectDB.Entities;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
@@ -11,12 +13,13 @@ import lombok.*;
 @Getter @Setter
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ID;
     private String NAME;
     private String SURNAME;
     private String USERNAME;
     private String PASSWORD;
 
-    private Boolean ACTIVE;
+    private int ACTIVE;
 
 }

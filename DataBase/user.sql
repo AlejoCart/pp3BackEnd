@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-04-2023 a las 02:41:00
+-- Tiempo de generación: 14-04-2023 a las 21:07:05
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.0.19
 
@@ -28,12 +28,12 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `user` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `NAME` varchar(30) NOT NULL,
   `SURNAME` varchar(30) NOT NULL,
   `USERNAME` varchar(30) NOT NULL,
   `PASSWORD` varchar(30) NOT NULL,
-  `Active` tinyint(1) NOT NULL DEFAULT 0
+  `Active` tinyint(1) NOT NULL DEFAULT 1,
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -41,8 +41,13 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`ID`, `NAME`, `SURNAME`, `USERNAME`, `PASSWORD`, `Active`) VALUES
-(1, 'Pedro', 'Gonzales', 'PepGonz', '12345', 0),
-(2, 'Pepito', 'El Pepote', 'Pepotrox123', 'ElSuperPepos', 0);
+(1, 'Pedro', 'Gonzales', 'PepGonzCambiado', '12345', 0),
+(2, 'Pepito', 'El Pepote', 'Pepotrox123', 'ElSuperPepos', 0),
+(3, 'Pedro', 'Gonzales', 'PepGonz', '12345', 1),
+(4, 'Pedro', 'Gonzales', 'PepGonz', '12345', 1),
+(5, 'Pedro', 'Gonzales', 'PepGonz', '12345', 1),
+(6, 'a', 'a', 'a', 'a', 1),
+(10, 'Test7', 'Test7', 'Test7', 'Test7', 1);
 
 --
 -- Índices para tablas volcadas
@@ -62,7 +67,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT de la tabla `user`
 --
 ALTER TABLE `user`
-  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
