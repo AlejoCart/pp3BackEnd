@@ -18,8 +18,9 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-//@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
-@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "*")//Deploy para todos los puertos
+//@CrossOrigin(origins = "http://localhost:4200") //deploy de los fuentes
+@CrossOrigin(origins = "http://127.0.0.1:9000") //Deploy del Transpilado
 public class UserController2 {
     @Autowired
     private UserService servicio;
