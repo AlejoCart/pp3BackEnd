@@ -1,34 +1,36 @@
-/*
-package com.example.connectDB.Controllers;
+package com.example.connectDB.Services;
+import com.example.connectDB.DAO.UserDao;
+
 
 import com.example.connectDB.Entities.User;
-import com.example.connectDB.Repositories.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
-@RestController
-//@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
-@CrossOrigin(origins = "http://localhost:4200")
-public class UserController {
+
+
+@Service
+public class UserService {
     @Autowired
-    private UserRepository repositorio;
+    private UserDao UserDao;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    @GetMapping("api/users/{id}")
-    public ResponseEntity<User> findById(@PathVariable Long id) {
+    public ResponseEntity<User> findById(Long id){
         Optional<User> aux;
-        aux = repositorio.findById(id);
+        aux = UserDao.findById(id);
         if(aux.get().getACTIVE()==1){
             return aux.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
         }
@@ -37,24 +39,15 @@ public class UserController {
         }
     }
 
-    @GetMapping("/api/users")
-    public ResponseEntity<Object> findAll() {
+    public ResponseEntity<Object> findAll(){
         List<User> lista=new ArrayList<>();
-        */
-/*repositorio.findAll().forEach(user-> {
-            if(user.getACTIVE()==1)
-                lista.add(user);
-        });*//*
-
-        repositorio.findAll().forEach(user -> {
+        UserDao.findAll().forEach(user -> {
             if (user.getACTIVE() == 1) lista.add(user);
         });
-        return new ResponseEntity<Object>(lista, HttpStatus.OK);
+        return new ResponseEntity<>(lista, HttpStatus.OK);
     }
 
-    @PostMapping("/api/users")
-    public ResponseEntity<User> create(@RequestBody User user,
-                                       @RequestHeader HttpHeaders headers) {
+    public ResponseEntity<User> create(User user) {
         //System.out.println(user.toString());
         if(user.getID()!=null ) {
             return ResponseEntity.badRequest().build();
@@ -65,17 +58,14 @@ public class UserController {
             // si podes hacer que funcino desde la DB borra la linea de abajo
             // Cambia tambien linea 103, adentro del update
             aux.setACTIVE(1);
-            repositorio.save(aux);
+            UserDao.save(aux);
             return ResponseEntity.ok(aux);
         }
     }
-
-    @PutMapping("/api/users/{id}")
-    public ResponseEntity<User> update(@PathVariable Long id,
-                                       @RequestBody Object userAux) {
+    public ResponseEntity<User> update(Long id, Object userAux) {
 
         ObjectMapper obj=new ObjectMapper();
-        User user = null;
+        com.example.connectDB.Entities.User user = null;
         String jsonStr = null;
         String passAux="";
 
@@ -90,7 +80,7 @@ public class UserController {
         System.out.println(jsonStr);
 
         try {
-            user = obj.readValue(jsonStr, User.class);
+            user = obj.readValue(jsonStr, com.example.connectDB.Entities.User.class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -98,29 +88,27 @@ public class UserController {
         //User user=(User)userAux;
         if (id== null) {
             return ResponseEntity.badRequest().build();
-        } else if (repositorio.existsById(id) && repositorio.getReferenceById(id).getACTIVE()==1) {
+        } else if (UserDao.existsById(id) && UserDao.findById(id).get().getACTIVE()==1) {
             user.setID(id);
             passAux=user.getPASSWORD();
             user.setPASSWORD(passwordEncoder.encode(passAux));
             //Hotfix porque la base de datos no me deja ponerlo por default
             user.setACTIVE(1);
-            repositorio.save(user);
-            return ResponseEntity.ok(repositorio.getReferenceById(user.getID()));
+            UserDao.save(user);
+            return ResponseEntity.ok(UserDao.findById(user.getID()).get());
         } else {
             return ResponseEntity.notFound().build();
         }
     }
-    @DeleteMapping("/api/users/{id}")
-    public ResponseEntity<User> deleteById(@PathVariable Long id){
-
+    public ResponseEntity<User> deleteById(Long id){
         if(id==null){
             return ResponseEntity.badRequest().build();
         }
-        else if(repositorio.existsById(id) && repositorio.getReferenceById(id).getACTIVE()==1){
-            User aux=repositorio.getReferenceById(id);
+        else if(UserDao.existsById(id) && UserDao.findById(id).get().getACTIVE()==1){
+            User aux=UserDao.findById(id).get();
             aux.setACTIVE(0);
-            repositorio.save(aux);
-            System.out.println("Delete - Active of: "+repositorio.getReferenceById(id).getNAME()+" "+repositorio.getReferenceById(id).getACTIVE());
+            UserDao.save(aux);
+            System.out.println("Delete - Active of: "+UserDao.findById(id).get().getNAME()+" "+UserDao.findById(id).get().getACTIVE());
             return ResponseEntity.noContent().build();
         }
         else {
@@ -128,14 +116,12 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/api/Users/")
     public ResponseEntity<User> deleteAll(){
-        if(repositorio.count()>0){
-            repositorio.findAll().forEach(user -> user.setACTIVE(0));
+        if(UserDao.count()>0){
+            UserDao.findAll().forEach(user -> user.setACTIVE(0));
             return ResponseEntity.noContent().build();
         }
         else return ResponseEntity.noContent().build();
     }
 
 }
-*/
