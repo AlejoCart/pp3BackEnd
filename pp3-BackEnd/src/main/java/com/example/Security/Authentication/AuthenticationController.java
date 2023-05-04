@@ -29,7 +29,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("verifies")
-    public boolean verifies(String jwt,String username){
+    public boolean verifies(@RequestBody String jwt,
+                            @RequestBody String username){
         return authenticationService.isValid(jwt,username);
     }
 
