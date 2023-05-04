@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/carteleraempleo
+    username: root
+    password: ElSaru84!
+    #driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+    database: MYSQL
+    #database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+  mvc:
+    dispatch-options-request: true
+
+
+
