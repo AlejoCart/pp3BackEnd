@@ -22,7 +22,7 @@ public class User implements UserDetails {
     private Long id;
     @Column(name = "name")
     private String name;
-    private String lastname;
+    private String surname;
     //@Column(name = "username")
     private String username;
     @Column(name = "PASSWORD")

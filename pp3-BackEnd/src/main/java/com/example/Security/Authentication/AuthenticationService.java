@@ -32,14 +32,15 @@ public class AuthenticationService {
         if(mailValid(request.getUsername())) {
             var user = User.builder()
                     .id(null)
-                    .name(request.getFirstname())
-                    .lastname(request.getLastname())
+                    .name(request.getName())
+                    .surname(request.getSurname())
                     .username(request.getUsername())
                     .password(passwordEncoder.encode(request.getPassword()))
                     .role(Role.USER)//meto mano
                     .active(true)
-                    .img("URL imagen")
-                    .carrera("Carrera de prueba")
+                    .img(request.getImg())
+                    .carrera(request.getCarrera())
+                    .birthdate(request.getBirthdate())
                     .build();
             repository.save(user);
             var jwtToken = jwtService.generateToken(user);
@@ -70,6 +71,8 @@ public class AuthenticationService {
             return ResponseEntity.notFound().build();
         }
 
+        if(!(repository.findByUsername(request.getUsername()).get().isActive()))
+            return ResponseEntity.notFound().build();
         //Usuario autenticado
         var user =
                 repository.findByUsername(request.getUsername()).orElseThrow();

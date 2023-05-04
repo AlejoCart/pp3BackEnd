@@ -5,15 +5,23 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegisterRequest {
 
-    private String firstname;
-    private String lastname;
+    private String name;
+    private String surname;
     private String username;
     private String password;
+
+    private Date birthdate;
+
+    private String carrera;
+
+    private String img;
     //private String email;
 }
