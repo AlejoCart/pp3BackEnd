@@ -20,8 +20,10 @@ public class RegisterRequest {
 
     private Date birthdate;
 
-    private String carrera;
+    private String career;
 
     private String img;
     //private String email;
+
+
 }

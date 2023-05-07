@@ -39,7 +39,7 @@ public class AuthenticationService {
                     .role(Role.USER)//meto mano
                     .active(true)
                     .img(request.getImg())
-                    .carrera(request.getCarrera())
+                    .career(request.getCareer())
                     .birthdate(request.getBirthdate())
                     .build();
             repository.save(user);

@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:4200")
 public class AuthenticationController {
@@ -28,7 +28,7 @@ public class AuthenticationController {
 
     }
 
-    @PostMapping("verifies")
+    @PostMapping("/verifies")
     public boolean verifies(@RequestBody String jwt,
                             @RequestBody String username){
         return authenticationService.isValid(jwt,username);

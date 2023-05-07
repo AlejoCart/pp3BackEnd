@@ -27,7 +27,7 @@ public class User implements UserDetails {
     private String username;
     @Column(name = "PASSWORD")
     private String password;
-    private String carrera;
+    private String career;
     @Enumerated(EnumType.STRING)
     private Role role;//Necesario debido a la implementacion de UserDetails
     private Date birthdate;
