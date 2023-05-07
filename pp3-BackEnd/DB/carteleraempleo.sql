@@ -12,7 +12,7 @@ CREATE TABLE `usuarios` (
   `ACTIVE` tinyint(1) NOT NULL DEFAULT '1',
   `ROLE` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `IMG` varchar(100) DEFAULT NULL,
-  `Carrera` varchar(100) NOT NULL,
+  `Career` varchar(100) NOT NULL,
   `birthdate` date DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `USERNAME` (`USERNAME`)
