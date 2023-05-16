@@ -30,6 +30,7 @@ public class AuthenticationController {
 
     @PostMapping("/verifies")
     public boolean verifies(@RequestBody String jwt){
+        //System.out.println("Entrado al endpoint verifies");
         return authenticationService.isValid(jwt);
     }
 

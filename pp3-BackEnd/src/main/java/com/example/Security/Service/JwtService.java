@@ -1,11 +1,12 @@
 package com.example.Security.Service;
 
 import com.example.Security.Authentication.AuthenticationRequest;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.impl.DefaultClaims;
+import io.jsonwebtoken.impl.crypto.DefaultJwtSignatureValidator;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.CachingUserDetailsService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -13,10 +14,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 @Service
@@ -24,13 +25,17 @@ public class JwtService {
 
     private static final String SECRET_KEY=
             "217A25432A462D4A614E645266556A586E3272357538782F413F4428472B4B62";
+    @Autowired
     private UserDetailsService userDetailsService;
+    private final SignatureAlgorithm sa = SignatureAlgorithm.HS256;
 
     public String extractUsername(String token){
+        //System.out.println("dentro de extraer Username");
         return extractClaim(token,Claims::getSubject);
     }
 
     public <T> T extractClaim(String token, Function<Claims,T> claimsResolver){
+        //System.out.println("Dentro de extraer claims");
         final Claims claims= extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
@@ -55,7 +60,7 @@ public class JwtService {
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis()+ 1000 * 60 * 24))//Tiempo de expiracion del token = 24 horas + 1000 milisegundos
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                .signWith(getSignInKey(), sa)
                 .compact();
     }
 
@@ -64,29 +69,28 @@ public class JwtService {
         final String username=extractUsername(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
-
-   /* public boolean isTokenValid(String token, String usernameRequest){
-
-        final String username=extractUsername(token);
-        return (username.equals(usernameRequest)) && !isTokenExpired(token);
-    }*/
     public boolean isTokenValid(String jwt) {
+        //System.out.println("Entrado al servicio de gestion del token");
         String username;
         String token;
         if (!jwt.startsWith("Bearer" + " ")) {
+            System.out.println("Falso");
             return false;
         }
-        System.out.println("Token sin cortar: "+jwt);
         token = jwt.substring(7);
-        System.out.println("Token cortado: "+token);
-        username = extractUsername(jwt);
-        System.out.println("Username del token cortado: "+username);
-        if (username != null /*&& SecurityContextHolder.getContext().getAuthentication().isAuthenticated()*/) {
+        try{
+        username = extractUsername(token);}
+        catch (UnsupportedJwtException e){
+            System.out.println(e);
+            return false;
+        }
+        //System.out.println("Username del token cortado?: "+username);
+        if (username != null && SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
             //Si el mail no es nulo en la request y el mail se encuentra
             // autenticado carga en memoria al usuario para verificar token
             UserDetails userDetails =
                     this.userDetailsService.loadUserByUsername(username);
-            if (isTokenValid(jwt, userDetails)) {
+            if (isTokenValid(token, userDetails)) {
                 return true;
                 }
             }
@@ -97,19 +101,48 @@ public class JwtService {
         return extractExpiration(token).before(new Date());
 
     }
+    private boolean isSignatureValid(String token){
+        String[] chunks = token.split("\\.");
+        Base64.Decoder decoder = Base64.getUrlDecoder();
+        String header = new String(decoder.decode(chunks[0]));
+        String payload = new String(decoder.decode(chunks[1]));
+        //SECRET_KEY.getBytes()
+        SecretKeySpec secretKeySpec =
+                new SecretKeySpec(getSignInKey().getEncoded(),
+                        sa.getJcaName());
+        System.out.println("Header: "+header);
+        System.out.println("Payload: "+payload);
+
+        String tokenWithoutSignature = chunks[0] + "." + chunks[1];
+        String signature = chunks[2];
+
+        DefaultJwtSignatureValidator validator =
+                new DefaultJwtSignatureValidator(sa, secretKeySpec);
+        if (!validator.isValid(tokenWithoutSignature, signature)) {
+            System.out.println("Could not verify JWT token integrity!");
+            return false;
+        }
+        return true;
+    }
 
     private Date extractExpiration(String token) {
         return extractClaim(token,Claims::getExpiration);
     }
 
     private Claims extractAllClaims(String token){
-
-        return Jwts
-                .parserBuilder()
-                .setSigningKey(getSignInKey())
-                .build().parseClaimsJwt(token)
-                .getBody();
-
+        Claims claims;
+        try {
+            claims = Jwts.parserBuilder()
+                    .setSigningKey(getSignInKey()).build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (Exception e) {
+            System.out.println(e.getMessage()+" Could not get claims " +
+                    "Token from " +
+                    "passed token");
+            claims = null;
+        }
+        return claims;
     }
 
     private Key getSignInKey() {

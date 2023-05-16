@@ -104,6 +104,7 @@ public class AuthenticationService {
     }
 
     public boolean isValid(String jwt) {
+        //System.out.println("Entrado al servicio de autenticacion");
         return jwtService.isTokenValid(jwt);
     }
 }

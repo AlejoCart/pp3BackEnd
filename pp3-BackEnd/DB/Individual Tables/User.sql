@@ -1,8 +1,4 @@
-Create database carteleraempleo;
-
--- carteleraempleo.usuarios definition
-
-CREATE TABLE `usuarios` (
+CREATE TABLE `User` (
   `ID` bigint NOT NULL AUTO_INCREMENT,
   `NAME` varchar(30) NOT NULL,
   `SURNAME` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT
