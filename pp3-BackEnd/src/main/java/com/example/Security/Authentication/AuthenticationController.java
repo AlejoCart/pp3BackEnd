@@ -14,7 +14,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
     private final JwtService jwtService;
 
-    @PostMapping("/singup")
+    @PostMapping("/signup")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request){
         System.out.println("dentro de registrar usuario");
         //return ResponseEntity.ok(service.register(request));
@@ -29,9 +29,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/verifies")
-    public boolean verifies(@RequestBody String jwt,
-                            @RequestBody String username){
-        return authenticationService.isValid(jwt,username);
+    public boolean verifies(@RequestBody String jwt){
+        return authenticationService.isValid(jwt);
     }
 
     //isvalid

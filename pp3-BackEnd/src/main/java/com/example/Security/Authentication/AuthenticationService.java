@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,9 +29,9 @@ public class AuthenticationService {
 
     public ResponseEntity<AuthenticationResponse> register(RegisterRequest request) {
         //System.out.println("dentro de servicio registro");
-    //Asume que los valores de la request no son nulos
+        //Asume que los valores de la request no son nulos
         System.out.println(request.getUsername());
-        if(mailValid(request.getUsername())) {
+        if (mailValid(request.getUsername())) {
             var user = User.builder()
                     .id(null)
                     .name(request.getName())
@@ -46,19 +48,18 @@ public class AuthenticationService {
             var jwtToken = jwtService.generateToken(user);
             return ResponseEntity.ok(AuthenticationResponse.builder()
                     .token(jwtToken).build());
+        } else {
+            System.out.println("Mail invalido");
+            return ResponseEntity.badRequest().build();
         }
-
-        else {
-                System.out.println("Mail invalido");
-            return ResponseEntity.badRequest().build();}
     }
 
     public ResponseEntity<AuthenticationResponse> authenticate(AuthenticationRequest request) {
-        String username=request.getUsername();
-        String password=request.getPassword();
+        String username = request.getUsername();
+        String password = request.getPassword();
         //System.out.println("Usuario encontrador por nombre: "+repository
         // .findByUsername(username));
-        try{
+        try {
             authenticationManager.authenticate(//Gestiona automaticamente que el
                     // usuario y contraseña esten correctos
                     new UsernamePasswordAuthenticationToken(
@@ -66,28 +67,28 @@ public class AuthenticationService {
                             password
                     )
             );
-        }catch (
-                AuthenticationException e){
+        } catch (
+                AuthenticationException e) {
             return ResponseEntity.notFound().build();
         }
 
-        if(!(repository.findByUsername(request.getUsername()).get().isActive()))
+        if (!(repository.findByUsername(request.getUsername()).get().isActive()))
             return ResponseEntity.notFound().build();
         //Usuario autenticado
         var user =
                 repository.findByUsername(request.getUsername()).orElseThrow();
-        var jwtToken= jwtService.generateToken(user);
+        var jwtToken = jwtService.generateToken(user);
         System.out.println("Usuario autenticado con exito");
         return ResponseEntity.ok(AuthenticationResponse.builder()
                 .token(jwtToken).build());
     }
-    private boolean mailValid(String email)
-    {
+
+    private boolean mailValid(String email) {
         /*String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
                 "[a-zA-Z0-9_+&*-]+)*@" +
                 "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
                 "A-Z]{2,7}$";*/
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\." +
                 "[a-zA-Z0-9_+&*-]+)*@" +
                 "itbeltran.com.ar";
         Pattern pat = Pattern.compile(emailRegex);
@@ -102,26 +103,8 @@ public class AuthenticationService {
         return pat.matcher(email).matches();
     }
 
-    public boolean isValid(String jwt,String username) {
-       /* try{
-            authenticationManager.authenticate(//Gestiona automaticamente que el
-                    // usuario y contraseña esten correctos
-                    new UsernamePasswordAuthenticationToken(
-                            request.getUsername(),
-                            request.getPassword()
-                    )
-            );
-        }catch (
-                AuthenticationException e){
-            return false;
-        }*/
-       /* UserDetails userDetails =
-                this.userDetailsService.loadUserByUsername(request.getUsername());*///Esto seria ineficiente con una carga de usuarios realista pero de momento sirve
-        return jwtService.isTokenValid(jwt,username);
+    public boolean isValid(String jwt) {
+        return jwtService.isTokenValid(jwt);
     }
-/*    private boolean validateRegisterRequest(RegisterRequest request){
-        if(mailValid(request.getEmail()))
-            if(request.)
-        return false;
-    }*/
 }
+
