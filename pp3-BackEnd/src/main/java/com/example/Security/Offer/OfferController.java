@@ -1,8 +1,6 @@
 package com.example.Security.Offer;
 
 import com.example.Security.Entities.Offer;
-import com.example.Security.Request.OfferRequest;
-import com.example.Security.Service.OfferService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,22 +8,45 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/Offer")
+@RequestMapping("/api/offer")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:4200")
 public class OfferController {
 
     private final OfferService offerService;
 
-    @GetMapping("/findOfferByCareer")
-    public ResponseEntity<List> findOfferByCareer(@RequestBody OfferRequest offerRequest){
+    @GetMapping("/findByCareer")
+    public ResponseEntity<List> findOfferByCareer(@RequestBody FindOfferByCareerRequest offerRequest){
         return offerService.findOfferByCareer(offerRequest);
     }
 
     @GetMapping("/test")
-    public OfferRequest test(){
-        return OfferRequest.builder().offset(0).limit(0).Career("Test").build();
+    public FindOfferByCareerRequest test(){
+        return FindOfferByCareerRequest.builder().offset(0).limit(0).Career("Test").build();
     }
+
+    @GetMapping(value = {"/","/findAll"})
+    public ResponseEntity<List> findAll(){
+        System.out.println("findAll");
+        return offerService.findAll();
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<com.example.Security.Entities.Offer> createOffer(@RequestBody Offer offerRequest){
+        return offerService.create(offerRequest);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity deleteOffer(@RequestParam Long id){
+        return offerService.delete(id);
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<Offer> updateOffer(@RequestBody Offer updateOfferRequest){
+        return offerService.update(updateOfferRequest);
+    }
+
+
 
 
 }
