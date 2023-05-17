@@ -31,5 +31,6 @@ CREATE TABLE `offer` (
   `text` varchar(30) NOT NULL,
   `modality` varchar(30) NOT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `offer_ck_modality` CHECK (((`modality` = _utf8mb4'presencial') or (`modality` = _utf8mb4'hibrida') or (`modality` = _utf8mb4'remoto')))
+  CONSTRAINT `offer_ck_modality` CHECK (((`modality` = _utf8mb4'PRESENCIAL') or
+  (`modality` = _utf8mb4'HIBRIDA') or (`modality` = _utf8mb4'REMOTO')))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

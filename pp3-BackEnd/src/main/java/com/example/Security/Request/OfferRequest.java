@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OfferRequest {
     private String Career;
-    private int limit;
-    private int offset;
+    private int limit;//Cantidad de ofertas solicitadas
+    private int offset;//num de pagina * cantidad de ofertas
 
 
 }

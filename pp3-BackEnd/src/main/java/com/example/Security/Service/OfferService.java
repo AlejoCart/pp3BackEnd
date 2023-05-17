@@ -33,11 +33,16 @@ public class OfferService {
         var career=offerRequest.getCareer();
         var offset=offerRequest.getOffset();
         var limit=offerRequest.getLimit();
-        Pageable ofertasEnPagina = PageRequest.of(offset,limit);
-        List<Offer> listaOfertas = offerRepository.findListOfferByCareer(
-            career,
-            offset,limit,
-            ofertasEnPagina);
+        //Pageable ofertasEnPagina = PageRequest.of(offset,offset+limit);
+        List<Offer> listaOfertas;
+        try{
+        listaOfertas = offerRepository.findListOfferByCareer(
+            career, offset,offset+limit
+            );}
+        catch (Exception e){
+            System.out.println(e.getMessage());
+            return ResponseEntity.internalServerError().build();
+        }
         Optional<List> aux= Optional.ofNullable(listaOfertas);
         return ResponseEntity.of(aux);
     }

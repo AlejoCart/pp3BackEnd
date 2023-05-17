@@ -12,6 +12,7 @@ spring:
       hibernate:
     database: MYSQL
     #database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    database-platform: org.hibernate.dialect.MySQLDialect
   mvc:
     dispatch-options-request: true
 
