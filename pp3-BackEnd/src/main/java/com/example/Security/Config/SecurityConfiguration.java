@@ -27,7 +27,10 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests()
                 .requestMatchers("/api/auth/**")//whitelist de las url del
                 // controlador
-                .permitAll()//permite todas las requests desde las url de la +
+                .permitAll()
+                .requestMatchers("/api/Offer/**")
+                .permitAll()//permite todas las requests
+                // desde las url de la +
                 // whitelist
                 .anyRequest()
                 .authenticated()

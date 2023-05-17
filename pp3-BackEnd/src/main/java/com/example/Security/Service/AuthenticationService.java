@@ -1,16 +1,16 @@
-package com.example.Security.Authentication;
+package com.example.Security.Service;
 
+import com.example.Security.Request.AuthenticationRequest;
+import com.example.Security.Authentication.AuthenticationResponse;
+import com.example.Security.Authentication.RegisterRequest;
 import com.example.Security.Entities.Role;
 import com.example.Security.Entities.User;
 import com.example.Security.Repository.UserRepository;
-import com.example.Security.Service.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
