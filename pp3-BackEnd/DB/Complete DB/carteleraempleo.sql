@@ -21,16 +21,17 @@ CREATE TABLE `User` (
 
 --Offer Table Definition--
 
+-- carteleraempleo.offer definition
+
 CREATE TABLE `offer` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `title` varchar(30) NOT NULL,
   `company` varchar(30) NOT NULL,
   `description` varchar(150) NOT NULL,
   `career` varchar(30) NOT NULL,
-  `updateDate` varchar(30) NOT NULL,
+  `update_Date` timestamp NOT NULL,
   `text` varchar(30) NOT NULL,
   `modality` varchar(30) NOT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `offer_ck_modality` CHECK (((`modality` = _utf8mb4'PRESENCIAL') or
-  (`modality` = _utf8mb4'HIBRIDA') or (`modality` = _utf8mb4'REMOTO')))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `offer_check_modality` CHECK ((`modality` in (_utf8mb4'REMOTO',_utf8mb4'PRESENCIAL',_utf8mb4'HIBRIDO')))
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
