@@ -28,8 +28,8 @@ public class SecurityConfiguration {
                 .requestMatchers("/api/auth/**")//whitelist de las url del
                 // controlador
                 .permitAll()
-                .requestMatchers("/api/Offer/**")
-                .permitAll()//permite todas las requests
+                /*.requestMatchers("/api/Offer/**")
+                .permitAll()//permite todas las requests*/
                 // desde las url de la +
                 // whitelist
                 .anyRequest()
