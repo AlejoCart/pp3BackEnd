@@ -34,7 +34,7 @@ public class AuthenticationService {
         System.out.println(request.getUsername());
         if (mailValid(request.getUsername())) {
             var user = User.builder()
-                    .id(null)
+                    .id_user(null)
                     .name(request.getName())
                     .surname(request.getSurname())
                     .username(request.getUsername())
@@ -58,8 +58,8 @@ public class AuthenticationService {
     public ResponseEntity<AuthenticationResponse> authenticate(AuthenticationRequest request) {
         String username = request.getUsername();
         String password = request.getPassword();
-        //System.out.println("Usuario encontrador por nombre: "+repository
-        // .findByUsername(username));
+        System.out.println("Usuario encontrador por nombre: "+repository
+        .findByUsername(username));
         try {
             authenticationManager.authenticate(//Gestiona automaticamente que el
                     // usuario y contraseña esten correctos
@@ -70,14 +70,19 @@ public class AuthenticationService {
             );
         } catch (
                 AuthenticationException e) {
+            System.out.println("Usuario no encontrado");
             return ResponseEntity.notFound().build();
         }
 
-        if (!(repository.findByUsername(request.getUsername()).get().isActive()))
+        if (!(repository.findByUsername(request.getUsername()).get().isActive())){
+            System.out.println("Usuario no activado");
             return ResponseEntity.notFound().build();
+        }
+
         //Usuario autenticado
         var user =
                 repository.findByUsername(request.getUsername()).orElseThrow();
+        System.out.println("Generando token...");
         var jwtToken = jwtService.generateToken(user);
         System.out.println("Usuario autenticado con exito");
         return ResponseEntity.ok(AuthenticationResponse.builder()

@@ -15,9 +15,14 @@ public class OfferController {
 
     private final OfferService offerService;
 
-    @GetMapping("/findByCareer")
-    public ResponseEntity<List> findOfferByCareer(@RequestBody FindOfferByCareerRequest offerRequest){
-        return offerService.findOfferByCareer(offerRequest);
+    @GetMapping("/myCareer/")
+    public ResponseEntity<List> findOfferByCareer(@RequestParam /*(value=
+            "1")*/String Career
+            ,@RequestParam String username)
+            /*@RequestBody
+    FindOfferByCareerRequest offerRequest*/{
+        System.out.println("Adentro del controlador");
+        return offerService.findListOfferByCareer(Career,username);
     }
 
     @GetMapping("/test")

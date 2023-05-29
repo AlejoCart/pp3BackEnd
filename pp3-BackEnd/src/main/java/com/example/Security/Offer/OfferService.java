@@ -2,6 +2,7 @@ package com.example.Security.Offer;
 
 import com.example.Security.Entities.Modality;
 import com.example.Security.Entities.Offer;
+import com.example.Security.Entities.User;
 import com.example.Security.Repository.OfferRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,15 +30,16 @@ public class OfferService {
         return ResponseEntity.notFound().build();
     }
 
-    public ResponseEntity<List> findOfferByCareer(FindOfferByCareerRequest offerRequest){
-        var career=offerRequest.getCareer();
+    public ResponseEntity<List> findListOfferByCareer(String career,
+                                                      String username){
+        /*
         var offset=offerRequest.getOffset();
-        var limit=offerRequest.getLimit();
+        var limit=offerRequest.getLimit();*/
         //Pageable ofertasEnPagina = PageRequest.of(offset,offset+limit);
         List<com.example.Security.Entities.Offer> listaOfertas;
         try{
         listaOfertas = offerRepository.findListOfferByCareer(
-            career, offset,offset+limit
+            career,username/*, 0,0+10*/
             );}
         catch (Exception e){
             System.out.println(e.getMessage());
@@ -53,9 +55,9 @@ public class OfferService {
             return ResponseEntity.badRequest().build();
 
         var aux= com.example.Security.Entities.Offer.builder()
-                        .ID(null)
+                        .id_offer(null)
                         .title(offerRequest.getTitle())
-                        .company(offerRequest.getCompany())
+                        .id_company(offerRequest.getId_company())
                         .description(offerRequest.getDescription())
                         .career(offerRequest.getCareer())
                         .text(offerRequest.getText())
@@ -80,7 +82,7 @@ public class OfferService {
         /*if(Arrays.stream(updateOfferRequest.getClass().getFields()).anyMatch(null))
             return */
 
-        if(!(offerRepository.findById(updateOfferRequest.getID()).isPresent()))
+        if(!(offerRepository.findById(updateOfferRequest.getId_offer()).isPresent()))
             return ResponseEntity.badRequest().build();
 
         if (!(updateOfferRequest.getModality().equals(Modality.class.getEnumConstants())))
@@ -89,8 +91,14 @@ public class OfferService {
         var aux= (com.example.Security.Entities.Offer) updateOfferRequest;
         offerRepository.save(aux);
 
-        return ResponseEntity.ok(offerRepository.findById(updateOfferRequest.getID()).get());
+        return ResponseEntity.ok(offerRepository.findById(updateOfferRequest.getId_offer()).get());
 
         //return null;
+    }
+
+    public ResponseEntity<List> findOfferFromUser(User user){
+
+
+        return null;
     }
 }

@@ -19,7 +19,7 @@ import java.util.List;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id_user;
     @Column(name = "name")
     private String name;
     private String surname;
@@ -33,6 +33,15 @@ public class User implements UserDetails {
     private Date birthdate;
     private boolean active;
     private String img;
+
+    @ManyToMany(/*mappedBy = "userList",targetEntity = Offer.class*/)//Define
+    // quien es el
+    // dueño
+    @JoinTable(
+            name = "user_offer",
+            joinColumns = @JoinColumn(name = "id_user"),
+            inverseJoinColumns = @JoinColumn(name = "id_offer"))
+    private List<Offer> offerList;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -54,7 +54,7 @@ public class JwtService {
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+ 1000 * 60 * 24))//Tiempo de expiracion del token = 24 horas + 1000 milisegundos
+                .setExpiration(new Date(System.currentTimeMillis()+ 1000 * 60 * 42))//Tiempo de expiracion del token = 24 horas + 1000 milisegundos
                 .signWith(getSignInKey(), sa)
                 .compact();
     }
@@ -65,7 +65,6 @@ public class JwtService {
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
     public boolean isTokenValid(String jwt) {
-        //System.out.println("Entrado al servicio de gestion del token");
         String username;
         String token;
         if (!jwt.startsWith("Bearer" + " ")) {
@@ -79,7 +78,6 @@ public class JwtService {
             System.out.println(e);
             return false;
         }
-        //System.out.println("Username del token cortado?: "+username);
         if (username != null && SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
             //Si el mail no es nulo en la request y el mail se encuentra
             // autenticado carga en memoria al usuario para verificar token

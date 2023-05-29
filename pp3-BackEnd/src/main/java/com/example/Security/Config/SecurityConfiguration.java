@@ -25,7 +25,7 @@ public class SecurityConfiguration {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/auth/**")//whitelist de las url del
+                .requestMatchers("/api/**")///api/auth/** whitelist de las url del
                 // controlador
                 .permitAll()
                 /*.requestMatchers("/api/Offer/**")
