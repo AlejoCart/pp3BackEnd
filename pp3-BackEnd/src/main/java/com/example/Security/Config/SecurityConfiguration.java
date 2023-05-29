@@ -1,6 +1,5 @@
 package com.example.Security.Config;
 
-import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +24,8 @@ public class SecurityConfiguration {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/**")///api/auth/** whitelist de las url del
+                .requestMatchers("/api/**")///api/auth/** whitelist de las
+                // url del
                 // controlador
                 .permitAll()
                 /*.requestMatchers("/api/Offer/**")

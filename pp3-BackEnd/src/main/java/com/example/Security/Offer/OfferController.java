@@ -11,19 +11,20 @@ import java.util.List;
 @RequestMapping("/api/offer")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "*")
 public class OfferController {
 
     private final OfferService offerService;
 
-    @GetMapping("/myCareer/")
+    /*@GetMapping("/myCareer/")
     public ResponseEntity<List> findOfferByCareer(@RequestParam /*(value=
-            "1")*/String Career
+            "1")String Career
             ,@RequestParam String username)
-            /*@RequestBody
-    FindOfferByCareerRequest offerRequest*/{
+            @RequestBody
+    FindOfferByCareerRequest offerRequest{
         System.out.println("Adentro del controlador");
         return offerService.findListOfferByCareer(Career,username);
-    }
+    }*/
 
     @GetMapping("/test")
     public FindOfferByCareerRequest test(){
@@ -31,7 +32,7 @@ public class OfferController {
     }
 
     @GetMapping(value = {"/","/findAll"})
-    public ResponseEntity<List> findAll(){
+    public ResponseEntity<List<Offer>> findAll(){
         System.out.println("findAll");
         return offerService.findAll();
     }

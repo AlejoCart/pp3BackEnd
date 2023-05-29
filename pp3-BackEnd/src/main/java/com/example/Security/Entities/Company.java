@@ -19,9 +19,9 @@ public class Company {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_company;
     private String name;
-    @OneToMany(targetEntity = Offer.class,cascade = CascadeType.ALL)
+   /* @OneToMany(targetEntity = Offer.class,cascade = CascadeType.ALL)
     @JoinColumn(name = "id_offer"/*,referencedColumnName = "ID",insertable=
-            false, updatable=false*/)
-    private List<Offer> offerList;
+            false, updatable=false)*/
+    //private List<Offer> offerList;
 
 }

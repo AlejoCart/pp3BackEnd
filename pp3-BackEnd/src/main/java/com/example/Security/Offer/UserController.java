@@ -3,7 +3,6 @@ package com.example.Security.Offer;
 import com.example.Security.Entities.User;
 import com.example.Security.Service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

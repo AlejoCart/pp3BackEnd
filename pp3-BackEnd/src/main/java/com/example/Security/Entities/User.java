@@ -1,7 +1,10 @@
 package com.example.Security.Entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,14 +37,14 @@ public class User implements UserDetails {
     private boolean active;
     private String img;
 
-    @ManyToMany(/*mappedBy = "userList",targetEntity = Offer.class*/)//Define
+    /*@ManyToMany(/*mappedBy = "userList",targetEntity = Offer.class)*///Define
     // quien es el
     // dueño
-    @JoinTable(
+    /*@JoinTable(
             name = "user_offer",
             joinColumns = @JoinColumn(name = "id_user"),
-            inverseJoinColumns = @JoinColumn(name = "id_offer"))
-    private List<Offer> offerList;
+            inverseJoinColumns = @JoinColumn(name = "id_offer_uo"))
+    private List<Offer> offerList;*/
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

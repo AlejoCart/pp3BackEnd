@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
-public interface OfferRepository extends JpaRepository<Offer,Long> {
+public interface OfferRepository extends JpaRepository<com.example.Security.Entities.Offer,Long> {
 
     @Override
     Optional<Offer> findById(Long aLong);
@@ -23,20 +23,13 @@ public interface OfferRepository extends JpaRepository<Offer,Long> {
 
     //Optional<Offer>
 
-    @Query(value="SELECT title,company_id,description,offer_career,text," +
-            "modality" +
-            " " +
-            "FROM offer JOIN user_offer ON offer.id  = user_offer.Offer_ID  " +
-            "join " +
-            "`user`" +
-            " on user_offer.user_ID =user.ID \n" +
-            "where (offer_career = ?1 and user.NAME = ?2);",
-            nativeQuery =
-                    true)
-    /*SELECT * FROM Offer JOIN Customers ON Orders" +
-            ".CustomerID=Customers.CustomerID where career = ?1 and  limit ?2,?3*/
-        /**/
+    @Query(value="SELECT * FROM offer"/*
+            " join `user` on user_offer.id_user =`user`.id_user where " +
+            "(offer.offer_career = ?1 and `user`.NAME = ?2);"*/,
+            nativeQuery =true)
     List<Offer> findListOfferByCareer(String career,
                                       String username /*int offset,
                                       int upperLimit*/);
+    @Query(value = "Select * from offer", nativeQuery = true)
+    List<Offer> findOffer();
 }

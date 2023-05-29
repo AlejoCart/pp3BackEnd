@@ -18,9 +18,11 @@ public class OfferService {
     @Autowired
     private OfferRepository offerRepository;
 
-    public ResponseEntity<List> findAll(){
+    public ResponseEntity<List<Offer>> findAll(){
+        List<Offer> offerList=offerRepository.findAll().stream().toList();
+        System.out.println(offerList);
         return
-                (ResponseEntity<List>) offerRepository.findAll();
+                ResponseEntity.of(Optional.of(offerRepository.findAll()));
     }
 
     public ResponseEntity<com.example.Security.Entities.Offer> findByID(Long id){
@@ -30,8 +32,8 @@ public class OfferService {
         return ResponseEntity.notFound().build();
     }
 
-    public ResponseEntity<List> findListOfferByCareer(String career,
-                                                      String username){
+    public ResponseEntity<List<Offer>> findListOfferByCareer(String career,
+                                                             String username){
         /*
         var offset=offerRequest.getOffset();
         var limit=offerRequest.getLimit();*/
@@ -45,7 +47,7 @@ public class OfferService {
             System.out.println(e.getMessage());
             return ResponseEntity.internalServerError().build();
         }
-        Optional<List> aux= Optional.ofNullable(listaOfertas);
+        Optional<List<Offer>> aux= Optional.ofNullable(listaOfertas);
         return ResponseEntity.of(aux);
     }
 

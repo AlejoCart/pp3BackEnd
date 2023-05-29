@@ -7,8 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
-import java.util.List;
-import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,15 +27,12 @@ public class Offer {
                     updatable=false))*/
     /*name =
     "fk_cp",*/
-    @ManyToOne(targetEntity = Company.class,cascade = CascadeType.ALL)
+    /*@ManyToOne(targetEntity = Company.class,cascade = CascadeType.ALL,fetch
+            = FetchType.LAZY)
     @JoinColumn(name = "id_company",insertable=
             false, updatable=false)
-    private Company company;
-
-    /*@OneToOne(targetEntity = Company.class)
-    @JoinColumn(name = "id_company")*/
+    private Company company;*/
     private Long id_company;
-
     private String description;
 
     @Column(name = "offer_career")
@@ -49,11 +44,11 @@ public class Offer {
     @Enumerated(EnumType.STRING)
     private Modality modality;
 
-    @ManyToMany
+    /*@ManyToMany(targetEntity = Offer.class)
     @JoinTable(
             name = "user_offer",
             joinColumns = @JoinColumn(name = "id_offer"),
             inverseJoinColumns = @JoinColumn(name = "id_user"))
-    private List<User> userList;
+    private List<User> userList;*/
 
 }

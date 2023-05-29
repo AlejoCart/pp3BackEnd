@@ -1,8 +1,5 @@
 package com.example.Security.Authentication;
 
-import com.example.Security.Authentication.AuthenticationRequest;
-import com.example.Security.Authentication.AuthenticationResponse;
-import com.example.Security.Authentication.RegisterRequest;
 import com.example.Security.Entities.Role;
 import com.example.Security.Entities.User;
 import com.example.Security.Repository.UserRepository;
@@ -56,6 +53,7 @@ public class AuthenticationService {
     }
 
     public ResponseEntity<AuthenticationResponse> authenticate(AuthenticationRequest request) {
+        System.out.println("Authentication method");
         String username = request.getUsername();
         String password = request.getPassword();
         System.out.println("Usuario encontrador por nombre: "+repository
