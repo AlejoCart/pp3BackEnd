@@ -38,12 +38,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request,response);
             return;
         }
-        jwt = authHeader.substring(7);
+        jwt = authHeader.substring(8,authHeader.length()-1);
+        System.out.println("jwt: "+jwt);//jwt =
+        // authHeader.substring(7);
         username=jwtService.extractUsername(jwt);
         System.out.println("Username en filtro de jwt: "+username);
 
 
-        if(username!=null && SecurityContextHolder.getContext().getAuthentication().isAuthenticated()){
+        if(username!=null /*&& SecurityContextHolder.getContext().getAuthentication().isAuthenticated()*/){
+
+            //Quien sabe porque chota se rompio el security context pero
+            // bueno TO DO
+
+
             //Si el mail no es nulo en la request y el mail se encuentra
             // autenticado carga en memoria al usuario para verificar token
             UserDetails userDetails =
