@@ -1,0 +1,1 @@
+CREATE DEFINER=`root`@`localhost` TRIGGER `trg_user_offer_updateDate` BEFORE INSERT ON `user_offer` FOR EACH ROW set new.updateDate =current_timestamp()
